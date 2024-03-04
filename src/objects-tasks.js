@@ -93,8 +93,8 @@ function compareObjects(obj1, obj2) {
  *    isEmptyObject({}) => true
  *    isEmptyObject({a: 1}) => false
  */
-function isEmptyObject(/* obj */) {
-  throw new Error('Not implemented');
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0;
 }
 
 /**
@@ -127,8 +127,14 @@ function makeImmutable(/* obj */) {
  *    makeWord({ a: [0, 1], b: [2, 3], c: [4, 5] }) => 'aabbcc'
  *    makeWord({ H:[0], e: [1], l: [2, 3, 8], o: [4, 6], W:[5], r:[7], d:[9]}) => 'HelloWorld'
  */
-function makeWord(/* lettersObject */) {
-  throw new Error('Not implemented');
+function makeWord(lettersObject) {
+  const result = [];
+  Object.keys(lettersObject).forEach((key) => {
+    lettersObject[key].forEach((el) => {
+      result[el] = key;
+    });
+  });
+  return result.join('');
 }
 
 /**
@@ -145,8 +151,32 @@ function makeWord(/* lettersObject */) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  const change = {
+    25: 0,
+    50: 0,
+  };
+
+  for (let i = 0; i < queue.length; i += 1) {
+    if (queue[i] === 25) {
+      change[25] += 1;
+    } else if (queue[i] === 50) {
+      change[25] -= 1;
+      change[50] += 1;
+    } else if (queue[i] === 100) {
+      if (change[50] > 0) {
+        change[50] -= 1;
+        change[25] -= 1;
+      } else {
+        change[25] -= 3;
+      }
+    }
+
+    if (change[25] < 0) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**
@@ -176,8 +206,8 @@ function Rectangle(/* width, height */) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 /**
@@ -221,8 +251,24 @@ function fromJSON(/* proto, json */) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    if (a.country < b.country) {
+      return -1;
+    }
+    if (a.country > b.country) {
+      return 1;
+    }
+    if (a.country === b.country) {
+      if (a.city < b.city) {
+        return -1;
+      }
+      if (a.city > b.city) {
+        return 1;
+      }
+    }
+    return 0;
+  });
 }
 
 /**
